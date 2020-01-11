@@ -1,1 +1,1 @@
-# Changed only the blog page for the project
+# Changed and added some content in the blog page.
