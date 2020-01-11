@@ -1,2 +1,1 @@
-# Thruskills---MyPortfolio
-Creating MyPortfolio
+# Changed only the blog page for the project
