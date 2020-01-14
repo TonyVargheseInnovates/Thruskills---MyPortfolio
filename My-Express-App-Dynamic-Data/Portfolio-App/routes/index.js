@@ -58,7 +58,20 @@ router.get("/projects/:id", function(req, res) {
 
 /* GET Blog Page. */
 router.get("/blog", function(req, res, next) {
-  res.render("index", { title: "Project Details", projects: data });
+  res.render("blog", {
+    title: "Project Details",
+    projects: data,
+    layout: "layout2"
+  });
+});
+
+/* GET Contact Page. */
+router.get("/contact", function(req, res, next) {
+  res.render("contact", {
+    title: "Contact Us",
+    projects: data,
+    layout: "layout2"
+  });
 });
 
 module.exports = router;
