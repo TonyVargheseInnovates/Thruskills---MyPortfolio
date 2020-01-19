@@ -1,52 +1,59 @@
 var express = require("express");
 var router = express.Router();
+var MongoClient = require("mongodb").MongoClient;
+var ObjectId = require("mongodb").ObjectID;
 
-data = [
-  {
-    title: "Project One",
-    description:
-      " Using only javascript and css,many divs are created which change color on clicking them.No html is used here.",
-    image: "/images/1.jpeg"
-  },
-  {
-    title: "Project Two",
-    description:
-      " Using only javascript and css,many divs are created which change color on clicking them.No html is used here.",
-    image: "/images/2.jpeg"
-  },
-  {
-    title: "Project Three",
-    description:
-      " Using only javascript and css,many divs are created which change color on clicking them.No html is used here.",
-    image: "/images/3.jpeg"
-  },
-  {
-    title: "Project Four",
-    description:
-      " Using only javascript and css,many divs are created which change color on clicking them.No html is used here.",
-    image: "/images/4.jpeg"
-  },
-  {
-    title: "Project Five",
-    description:
-      " Using only javascript and css,many divs are created which change color on clicking them.No html is used here.",
-    image: "/images/5.jpeg"
-  }
-];
+var url = "mongodb://localhost:27017/";
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
-  res.render("home", { title: "Express" });
+  // Retreiving details for Recent Posts from Mongo DB
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("portfolio");
+    dbo
+      .collection("projects")
+      .find({})
+      .limit(3)
+      .toArray(function(err, projects) {
+        if (err) throw err;
+        console.log("Projects = " + JSON.stringify(projects));
+        res.render("home", { projects: projects });
+      });
+    dbo
+      .collection("blog")
+      .find({})
+      .limit(3)
+      .toArray(function(err, blog) {
+        if (err) throw err;
+        console.log("Blog = " + JSON.stringify(blog));
+        db.close();
+        res.render("home", { blog: blog });
+      });
+  });
 });
 
 /* GET Projects Page. */
 router.get("/projects", function(req, res, next) {
-  res.render("index", { title: "Project Details", projects: data });
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("portfolio");
+    dbo
+      .collection("projects")
+      .find({})
+      .toArray(function(err, projects) {
+        if (err) throw err;
+        console.log("Projects = " + JSON.stringify(projects));
+        db.close();
+        res.render("index", { title: "Project Details", projects: projects });
+      });
+  });
 });
 /* Get Project Details */
 router.get("/projects/:id", function(req, res) {
   let id = parseInt(req.params.id);
-  console.log("id --- > ", typeof id);
+  res.render("project-detail", { data: data[id] });
+  console.log("id --- > ", id);
   if (id < data.length) {
     res.render("project-detail", { data: data[id] });
   } else {
@@ -58,10 +65,23 @@ router.get("/projects/:id", function(req, res) {
 
 /* GET Blog Page. */
 router.get("/blog", function(req, res, next) {
-  res.render("blog", {
-    title: "Project Details",
-    projects: data,
-    layout: "layout2"
+  // Get data from MongoDB
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("portfolio");
+    dbo
+      .collection("blog")
+      .find({})
+      .toArray(function(err, blog) {
+        if (err) throw err;
+        console.log("Blog = " + JSON.stringify(blog));
+        db.close();
+        res.render("blog", {
+          title: "Blog",
+          layout: "layout2",
+          blog: blog
+        });
+      });
   });
 });
 
@@ -69,7 +89,40 @@ router.get("/blog", function(req, res, next) {
 router.get("/contact", function(req, res, next) {
   res.render("contact", {
     title: "Contact Us",
-    projects: data,
+    layout: "layout2"
+  });
+});
+
+router.post("/contact", function(req, res) {
+  //console.table(req.body);
+  let name = req.body.name;
+  let mobile = req.body.mobile;
+  let email = req.body.email;
+  let description = req.body.description;
+
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    var dbo = db.db("portfolio");
+    let contact = {
+      name,
+      mobile,
+      email,
+      message: description,
+      date_created: new Date(),
+      date_modified: new Date()
+    };
+    dbo.collection("contact").insertOne(contact, function(err, contactObj) {
+      if (err) throw err;
+      console.log("1 document inserted. Name:" + contactObj.name);
+      db.close();
+      res.render("contact", { success: true });
+    });
+  });
+});
+
+/* GET About Page. */
+router.get("/about", function(req, res, next) {
+  res.render("about", {
     layout: "layout2"
   });
 });
