@@ -18,17 +18,16 @@ router.get("/", function(req, res, next) {
       .toArray(function(err, projects) {
         if (err) throw err;
         console.log("Projects = " + JSON.stringify(projects));
-        res.render("home", { projects: projects });
-      });
-    dbo
-      .collection("blog")
-      .find({})
-      .limit(3)
-      .toArray(function(err, blog) {
-        if (err) throw err;
-        console.log("Blog = " + JSON.stringify(blog));
-        db.close();
-        res.render("home", { blog: blog });
+        dbo
+          .collection("blog")
+          .find({})
+          .limit(3)
+          .toArray(function(err, blog) {
+            if (err) throw err;
+            console.log("Blog = " + JSON.stringify(blog));
+            db.close();
+            res.render("home", { blog: blog, projects: projects });
+          });
       });
   });
 });

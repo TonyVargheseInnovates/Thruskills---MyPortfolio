@@ -11,12 +11,12 @@
     <h1 class="responsive-headline">Hello,</h1>
     <p>Welcome to our Portfolio</p>
     <div class="row no-padding" style="padding-left: 18%;">
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <img class="profile-pic" src="images/tony.png" alt="profilepic">
             <br>
             <h4 style="padding-left:5%; padding-top:5%">Tony Varghese</h4>
         </div>
-        <div class="col-sm-6">
+        <div class="col-md-6">
             <img class="profile-pic" src="/images/talha.png" alt="profilepic">
             <br>
             <h4 style="padding-left: 8%; padding-top:5%">Talha Mirza</h4>
@@ -29,16 +29,16 @@
 
 <div>
     <div class="row no-padding">
-        <div class="col-sm-9">
+        <div class="col-md-9">
             <h1 class="responsive-headline">Recent Projects</h1>
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
             <h4><a href="/projects">View All</a></h4>
         </div>
     </div>
     <div class="row no-padding">
         {{#each projects}}
-        <div class="col-sm-4 mt-4 mb-4">
+        <div class="col-md-4 mt-4 mb-4">
             <div class="card">
                 <a href="/projects/{{_id}}"><img class="card-img-top" src="{{this.image}}" alt="" height="250px" /></a>
                 <div class="card-body">
@@ -64,10 +64,10 @@
 <!-- Recent Blog Posts -->
 <div>
     <div class="row no-padding">
-        <div class="col-sm-9">
+        <div class="col-md-9">
             <h1 class="responsive-headline">Recent Blog Posts</h1>
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
             <h4><a href="/blog">View All</a></h4>
         </div>
     </div>
@@ -75,7 +75,7 @@
 
 <div class="row no-padding">
     {{#each blog}}
-    <div class="col-sm-4 mt-4 mb-4">
+    <div class="col-md-4 mt-4 mb-4">
         <div class="card">
             <a href="/projects/{{_id}}"><img class="card-img-top" src="{{this.blogImage}}" alt="" height="250px" /></a>
             <div class="card-body">
